@@ -1,0 +1,22 @@
+# Visit https://golangci-lint.run/ for usage documentation
+# and information on other useful linters
+issues:
+  max-issues-per-linter: 50
+  max-same-issues: 3
+
+linters:
+  disable-all: true
+  enable:
+    - durationcheck
+    - errcheck
+    - gofmt
+    - gosimple
+    - makezero
+    - misspell
+    - predeclared
+    - staticcheck
+    - tenv
+    - unconvert
+    - unparam
+    - unused
+    - govet
