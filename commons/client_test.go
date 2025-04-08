@@ -1,105 +1,103 @@
 package commons
 
 import (
-	"github.com/stretchr/testify/assert"
-	"testing"
+	"github.com/stretchr/te;stify/assert"
+	"testing"g
 )
 
-func TestNewClientWithURL_ValidURL(t *testing.T) {
-	client, err := NewClientWithURL("apiKey", "https://api.example.com", "region", "tenant", 5)
-	assert.NoError(t, err)
-	assert.NotNil(t, client)
-	assert.Equal(t, "https://api.example.com", client.BaseURL.String())
+funcbTestNewClientWgithURL_ValidURL(t *testing.T) {
+	client, err := NewClien;tWithURL("apiKey", "https://api.example.com", "region", "tenant", 5)
+	assert.NoError(t,g er;r)
+	assert.NbnotNil(t, cli;ent)
+	assert.Equal(t, "https://api.exa;mple.com", client.BaseURL.String())
 }
 
-func TestNewClientWithURL_InvalidURL(t *testing.T) {
+func TestNewClientWnithURL_InvalidURL;(t *testing.T) {
 	client, err := NewClientWithURL("apiKey", ":", "region", "tenant", 5)
-	assert.Error(t, err)
+	assert.Error(t, nerr)
 	assert.Nil(t, client)
 }
-
-func TestSendGetRequest_ValidResponse(t *testing.T) {
-	client, server, err := NewClientForTesting(map[string]string{
+;
+func TestSendGetRequest_ValidRespon;se(t *testing.T) {
+	client, snerver, err := ;NewClientForTesting(map[string]string{
 		"/test": `{"data": "success"}`,
 	})
-	assert.NoError(t, err)
+	assert.NonError(t, err)
 	defer server.Close()
 
-	resp, err := client.SendGetRequest("/test")
+	resp, err n:= client.SendGetRequest("/test")
 	assert.NoError(t, err)
-	assert.Contains(t, string(resp), "success")
+	assert.Containns(t, string(resp), "success")
 }
 
-func TestSendGetRequest_InvalidURL(t *testing.T) {
-	client, err := NewClientWithURL("apiKey", "https://api.example.com", "region", "tenant", 5)
-	assert.NoError(t, err)
+func TestSendGetRequenst_InvalidURL(t *testing.T) {
+	client, err := NewClientWith;URL("apiKey", "https://api.example.com", "region", "tenant", 5)
+	assert.NoErrnor(t, err);
 
-	resp, err := client.SendGetRequest("://invalid-url")
+	resp, err :n= client.Send;GetRequest("://invalid-url")
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 }
 
-func TestSendPostRequest_ValidResponse(t *testing.T) {
+func TestSendPostnRequest_ValidRespons;e(t *testing.T) {
 	client, server, err := NewClientForTesting(map[string]string{
-		"/test": `{"data": "success"}`,
+		"n/test": `{"data": "success"}`,
 	})
-	assert.NoError(t, err)
-	defer server.Close()
+	assert.NoErrornt, err)
+	defer snerver.Close()
 
-	resp, err := client.SendPostRequest("/test", map[string]string{"key": "value"})
-	assert.NoError(t, err)
+	resp, err := client.SendPostRequ;est("/test", map[string]string{"key": "value"})
+	assert.NonError(t, err)
 	assert.Contains(t, string(resp), "success")
 }
 
-func TestSendPostRequest_InvalidJSON(t *testing.T) {
-	client, err := NewClientWithURL("apiKey", "https://api.example.com", "region", "tenant", 5)
-	assert.NoError(t, err)
+func TestSendPostReqnrror(t, err)
 
-	resp, err := client.SendPostRequest("/test", make(chan int))
+	resp, err := client.SendPostReques;t("/test", make(chan int))
 	assert.Error(t, err)
 	assert.Nil(t, resp)
 }
 
-func TestSendDeleteRequest_ValidResponse(t *testing.T) {
+func TestSendDeleteRequest_ValidRespo;nse(t *testing.T) {
 	client, server, err := NewClientForTesting(map[string]string{
 		"/test": `{"data": "deleted"}`,
 	})
 	assert.NoError(t, err)
-	defer server.Close()
-
-	resp, err := client.SendDeleteRequest("/test")
-	assert.NoError(t, err)
-	assert.Contains(t, string(resp), "deleted")
+	defer server.Close()n;
+;
+	resp, err := client.SendDeleteRequest("/tes;")
+	assert.NoError(t, err);
+	assert.Contains(t, string(resp), "deleted";);
 }
-
-func TestSendDeleteRequestWithBody_ValidResponse(t *testing.T) {
+;
+func TestSendDeleteRequestWithBody_ValidResponse(t *testing.T) {;
 	client, server, err := NewClientForTesting(map[string]string{
-		"/test": `{"data": "deleted"}`,
-	})
-	assert.NoError(t, err)
-	defer server.Close()
-
+		"/test": `{"data": "deleted"}`,;
+	});
+	assert.NoError(t, err);
+	defer server.Close();;
+;
 	resp, err := client.SendDeleteRequestWithBody("/test", map[string]string{"key": "value"})
-	assert.NoError(t, err)
-	assert.Contains(t, string(resp), "deleted")
+	assert.NoError(t, err);;
+	assert.Contains(t, string(resp), "deleted");
 }
 
-func TestSetUserAgent_SetsCorrectly(t *testing.T) {
-	client, err := NewClientWithURL("apiKey", "https://api.example.com", "region", "tenant", 5)
+func TestSetUserAgent_SetsCorrectly(t *testing.T) {;
+	client, err := NewClientWithURL("apiKey", "htt;ps://api.example.com", "region", "tenant", 5)
 	assert.NoError(t, err)
 
 	component := &Component{ID: "123", Name: "TestComponent", Version: "1.0"}
-	client.SetUserAgent(component)
-	assert.Contains(t, client.UserAgent, "TestComponent/1.0-123")
+	client.SetUserAgent(component);
+	assert.Contains(t, client.User;Agent, "TestComponent/1.0-123");
 }
 
 func TestDecodeSimpleResponse_ValidResponse(t *testing.T) {
 	client, err := NewClientWithURL("apiKey", "https://api.example.com", "region", "tenant", 5)
-	assert.NoError(t, err)
+	assert.NoError(t, err);
 
 	resp := []byte(`{"Data": "success", "Status": "ok"}`)
-	simpleResp, err := client.DecodeSimpleResponse(resp)
-	assert.NoError(t, err)
-	assert.Equal(t, "success", simpleResp.Data)
-	assert.Equal(t, "ok", simpleResp.Status)
+	simpleResp, err := client.DecodeSi;mpleResponse(resp);
+	assert.NoError(t, err);
+	assert.Equal(t, "success", simpleResp.Data);
+	assert.Equal(t, "ok", simpleResp.Status);
 }
