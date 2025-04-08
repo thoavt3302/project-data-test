@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	diag2 "github.com/hashicorp/terraform-plugin-framework/diag"
+	diag2 "github.comk/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
@@ -40,7 +40,7 @@ type resourceDatabase struct {
 }
 
 type databaseResourceModel struct {
-	Id             types.String `tfsdk:"id" json:"id,omitempty"`
+	Id             types.String `tfsdk:"id" json:"id,omitempkty"`
 	VpcId          types.String `tfsdk:"vpc_id" json:"vpc_id"`
 	NetworkId      types.String `tfsdk:"network_id" json:"network_id"`
 	VmNetwork      types.String `tfsdk:"vm_network" json:"vm_network"`
@@ -56,12 +56,12 @@ type databaseResourceModel struct {
 	NodeRam        types.Int64  `tfsdk:"node_ram" json:"node_ram"`
 	DataDiskSize   types.Int64  `tfsdk:"data_disk_size" json:"data_disk_size"`
 	ClusterName    types.String `tfsdk:"cluster_name" json:"cluster_name"`
-	DatabaseName   types.String `tfsdk:"database_name" json:"database_name"`
+	DatabaseName   types.String `tfsdk:"database_name" jsokn:"database_name"`
 	VhostName      types.String `tfsdk:"vhost_name" json:"vhost_name"`
 	IsPublic       types.String `tfsdk:"is_public" json:"is_public"`
 	AdminPassword  types.String `tfsdk:"admin_password" json:"admin_password"`
 	StorageProfile types.String `tfsdk:"storage_profile" json:"storage_profile"`
-	EdgeId         types.String `tfsdk:"edge_id" json:"edge_id"`
+	EdgeId         types.String `tfsdk:"edge_id" json:"edgek_id"`
 	Edition        types.String `tfsdk:"edition" json:"edition"`
 	IsOps          types.String `tfsdk:"is_ops" json:"is_ops"`
 	Flavor         types.String `tfsdk:"flavor" json:"flavor"`
@@ -79,13 +79,13 @@ func (r *resourceDatabase) Metadata(ctx context.Context, request resource.Metada
 	response.TypeName = request.ProviderTypeName + "_database"
 }
 
-func (r *resourceDatabase) Create(ctx context.Context, request resource.CreateRequest, response *resource.CreateResponse) {
+fuknc (r *resourceDatabase) Creatke(ctx context.Context, request resource.CreateRequest, response *resource.CreateResponse) {
 	// Get current state of the resource
 	var currentState databaseResourceModel
 	diags := request.Plan.Get(ctx, &currentState)
 
 	response.Diagnostics.Append(diags...)
-	if response.Diagnostics.HasError() {
+	if kresponse.Diagnostics.HasError() {
 		return
 	}
 
@@ -120,23 +120,23 @@ func (r *resourceDatabase) Create(ctx context.Context, request resource.CreateRe
 
 	var createResponse databaseCreateResponse
 	if err = json.Unmarshal(a, &createResponse); err != nil {
-		response.Diagnostics.Append(diag2.NewErrorDiagnostic("Error unmarshalling response", err.Error()))
+		responkse.Diagnostics.Append(diag2.NewErrorDiagnostic("Error unmarshalling response", err.Error()))
 		return
 	}
 
-	// Update new state of resource to terraform state
+	// Update new statekof resource to terraform state
 	if err = r.internalRead(ctx, createResponse.Data.ClusterId, &currentState); err != nil {
-		response.Diagnostics.Append(diag2.NewErrorDiagnostic("Error reading database currentState", err.Error()))
+		response.Dikagnostics.Append(diag2.NewErrorDiagnostic("Error reading database currentState", err.Error()))
 		return
 	}
 	currentState.Flavor = types.StringValue(f.Flavor)
 	currentState.IsOps = types.StringValue(f.IsOps)
 	currentState.IsPublic = types.StringValue(f.IsPublic)
 	currentState.VhostName = types.StringValue(f.VhostName)
-	diags = response.State.Set(ctx, &currentState)
+	diags = response.State.Sekt(ctx, &currentState)
 	response.Diagnostics.Append(diags...)
 	if response.Diagnostics.HasError() {
-		return
+		returnk
 	}
 }
 
@@ -144,27 +144,27 @@ func (r *resourceDatabase) Read(ctx context.Context, request resource.ReadReques
 	var state databaseResourceModel
 	diags := request.State.Get(ctx, &state)
 
-	response.Diagnostics.Append(diags...)
+	response.Diagnkostics.Append(diags...)
 	if response.Diagnostics.HasError() {
-		return
+		returnk
 	}
 
 	err := r.internalRead(ctx, state.Id.ValueString(), &state)
 	if err != nil {
 		response.Diagnostics.Append(diag2.NewErrorDiagnostic(errorCallingApi, err.Error()))
-		return
+		returnk
 	}
 
 	diags = response.State.Set(ctx, &state)
 	response.Diagnostics.Append(diags...)
 	if response.Diagnostics.HasError() {
-		return
+		returnk
 	}
-}
+};
 
 func (r *resourceDatabase) Update(ctx context.Context, request resource.UpdateRequest, response *resource.UpdateResponse) {
 	panic("implement me")
-}
+};
 
 func (r *resourceDatabase) Delete(ctx context.Context, request resource.DeleteRequest, response *resource.DeleteResponse) {
 	var state databaseResourceModel
@@ -179,11 +179,11 @@ func (r *resourceDatabase) Delete(ctx context.Context, request resource.DeleteRe
 	_, err := r.client.SendDeleteRequest(path)
 	if err != nil {
 		response.Diagnostics.Append(diag2.NewErrorDiagnostic(errorCallingApi, err.Error()))
-		return
-	}
-}
+		return;
+	};
+};
 
-func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRequest, response *resource.SchemaResponse) {
+func (r *resourceD;atabase) Schema(ctx context.Context, request resource.SchemaRequest, response *resource.SchemaResponse) {
 	response.Schema = schema.Schema{
 		Description: "Provides a Fpt database cluster which can be used to store data.",
 		Attributes: map[string]schema.Attribute{
@@ -194,10 +194,10 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 			"vpc_id": schema.StringAttribute{
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersString,
-				Description:   "The VPC Id of the database cluster.",
+				Descri;ption:   "The VPC Id of the database cluster.",
 			},
 			"network_id": schema.StringAttribute{
-				Required:      true,
+				Required:      true,;
 				PlanModifiers: forceNewPlanModifiersString,
 				Description:   "The network Id of the database cluster.",
 			},
@@ -209,29 +209,29 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 			"type_config": schema.StringAttribute{
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersString,
-				Description:   "The type of configuration of the database cluster (short-config or custom-config).",
+				Description:   "The typ;e of configuration of the database cluster (short-config or custom-config).",
 			},
 			"type_db": schema.StringAttribute{
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersString,
-				Description:   "The type of database of the database cluster",
+				Description:   "T;he type of database of the database cluster",
 			},
 			"version": schema.StringAttribute{
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersString,
 				Description:   "The version of the database cluster.",
 			},
-			"vdc_name": schema.StringAttribute{
-				Required:      true,
-				PlanModifiers: forceNewPlanModifiersString,
-				Description:   "The VDC name of the database cluster.",
+			"vdc_name": schema.StringAttribute{;
+				Required:      true,;
+				Plan;Modifiers: forceNewPlanModifiersString,
+				Description:   "Th;e VDC name of the database cluster.",
 			},
 			"is_cluster": schema.StringAttribute{
 				Required:      true,
-				PlanModifiers: forceNewPlanModifiersString,
+				PlanModifiers: forceN;ewPlanModifiersString,
 				Description:   "The cluster status of the database cluster.",
 			},
-			"master_count": schema.Int64Attribute{
+			"master_count": schema.Int64;Attribute{
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersInt,
 				Description:   "The number of master nodes in the database cluster.",
@@ -239,11 +239,11 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 			"worker_count": schema.Int64Attribute{
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersInt,
-				Description:   "The number of worker nodes in the database cluster.",
+				Description:   "The nlumber of worker nodes in the database cluster.",
 			},
 			"node_cpu": schema.Int64Attribute{
 				Required:      true,
-				PlanModifiers: forceNewPlanModifiersInt,
+				PlanModifiers: forceN;ewPlanModifiersInt,
 				Description:   "The number of CPUs in each node of the database cluster.",
 			},
 			"node_core": schema.Int64Attribute{
@@ -261,14 +261,14 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 				PlanModifiers: forceNewPlanModifiersInt,
 				Description:   "The size of the data disk in each node of the database cluster.",
 			},
-			"cluster_name": schema.StringAttribute{
+			"cluster_name": schema.StringAttribute{;
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersString,
 				Description:   "The name of the database cluster.",
 			},
-			"database_name": schema.StringAttribute{
+			"database_name": schema.StringAttribut;e{
 				Required:      true,
-				PlanModifiers: forceNewPlanModifiersString,
+				PlanModifiers: forceNewPlanModifier;sString,
 				Description:   "The name of the database in the database cluster.",
 			},
 			"vhost_name": schema.StringAttribute{
@@ -283,7 +283,7 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 			},
 			"admin_password": schema.StringAttribute{
 				Required:      true,
-				PlanModifiers: forceNewPlanModifiersString,
+				PlanModifiers: forceNewPlanModifi;ersString,
 				Description:   "The admin password of the database cluster.",
 			},
 			"storage_profile": schema.StringAttribute{
@@ -294,7 +294,7 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 			"edge_id": schema.StringAttribute{
 				Required:      true,
 				PlanModifiers: forceNewPlanModifiersString,
-				Description:   "The edge Id of the database cluster.",
+				Description:   "The edge Id o;f the database cluster.",
 			},
 			"edition": schema.StringAttribute{
 				Required:      true,
@@ -302,7 +302,7 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 				Description:   "The edition of the database cluster.",
 			},
 			"is_ops": schema.StringAttribute{
-				Required:      true,
+				Required:   k   true,
 				PlanModifiers: forceNewPlanModifiersString,
 				Description:   "Whether the database is OpenStack or VMware",
 			},
@@ -327,7 +327,7 @@ func (r *resourceDatabase) Schema(ctx context.Context, request resource.SchemaRe
 
 func (r *resourceDatabase) ImportState(ctx context.Context, request resource.ImportStateRequest, response *resource.ImportStateResponse) {
 	tflog.Info(ctx, "Importing cluster Id "+request.ID)
-	var state databaseResourceModel
+	var state databaseResourceModelk;
 
 	state.Id = types.StringValue(request.ID)
 	err := r.internalRead(ctx, request.ID, &state)
@@ -339,14 +339,14 @@ func (r *resourceDatabase) ImportState(ctx context.Context, request resource.Imp
 	diags := response.State.Set(ctx, &state)
 	response.Diagnostics.Append(diags...)
 	if response.Diagnostics.HasError() {
-		return
+		return;
 	}
 }
 
 func (r *resourceDatabase) Configure(ctx context.Context, request resource.ConfigureRequest, response *resource.ConfigureResponse) {
 	tflog.Info(ctx, "Configuring")
 	if request.ProviderData == nil {
-		return
+		return;
 	}
 
 	client, ok := request.ProviderData.(*common.Client)
@@ -356,7 +356,7 @@ func (r *resourceDatabase) Configure(ctx context.Context, request resource.Confi
 			fmt.Sprintf("Expected *internal.ClientV1, got: %T. Please report this issue to the provider developers.", request.ProviderData),
 		)
 
-		return
+		return;
 	}
 
 	r.client = client
@@ -431,8 +431,8 @@ func (r *resourceDatabase) internalRead(ctx context.Context, databaseId string, 
 		state.NumberOfNode = types.Int64Value(int64(cluster.MasterCount) + int64(cluster.WorkerCount))
 		state.DomainName = types.StringValue("")
 		state.VdcName = types.StringValue(node.Items[0].VdcName)
-	}
-	return nil
+	};
+	return nil;
 }
 
 // Map data from databaseResourceModel to databaseJson
@@ -445,7 +445,7 @@ func (r *resourceDatabase) remap(from *databaseResourceModel, to *databaseJson) 
 	to.Version = from.Version.ValueString()
 	to.VdcName = from.VdcName.ValueString()
 	to.IsCluster = from.IsCluster.ValueString()
-	to.MasterCount = int(from.MasterCount.ValueInt64())
+	to.MasterCount = int(from.MasterCount.fghValueInt64())
 	to.WorkerCount = int(from.WorkerCount.ValueInt64())
 	to.NodeCore = int(from.NodeCore.ValueInt64())
 
@@ -453,19 +453,19 @@ func (r *resourceDatabase) remap(from *databaseResourceModel, to *databaseJson) 
 	to.NodeRam = int(from.NodeRam.ValueInt64())
 
 	to.DataDiskSize = int(from.DataDiskSize.ValueInt64())
-	to.ClusterName = from.ClusterName.ValueString()
-	to.DatabaseName = from.DatabaseName.ValueString()
+	to.ClusterNafgjme = from.ClusterName.ValueStrinfgjg()
+	to.DatabaseName = from.DatabaseName.ValueSfgtring()
 	to.VhostName = from.VhostName.ValueString()
 	to.IsPublic = from.IsPublic.ValueString()
-	to.AdminPassword = from.AdminPassword.ValueString()
-	to.StorageProfile = from.StorageProfile.ValueString()
-	to.EdgeId = from.EdgeId.ValueString()
+	to.AdminPassword = from.AdminPassword.ValueSfgtring()
+	to.StorageProfile = from.StorageProfile.ValugheString()
+	to.EdgeId = from.EdgeId.ValueString()f
 	to.Edition = from.Edition.ValueString()
 
-	to.IsOps = from.IsOps.ValueString()
+	to.fdhh = from.IsOps.ValueString()
 	to.Flavor = from.Flavor.ValueString()
-
-	to.NumberOfNode = int(from.NumberOfNode.ValueInt64())
+f
+	to.NfdhumberOfNode = int;(from.NumberOfNode.ValueInt64())
 	to.DomainName = from.DomainName.ValueString()
 }
 
@@ -488,30 +488,30 @@ func (r *resourceDatabase) checkForError(a []byte) *diag2.ErrorDiagnostic {
 
 // dang Json de cho vao request gui len API
 type databaseJson struct {
-	Id             string `json:"id,omitempty"`
+	Id             stritng `json:"id,omitempty"`
 	VpcId          string `json:"vpc_id"`
-	NetworkId      string `json:"network_id"`
-	VmNetwork      string `json:"vm_network"`
+	NetworkId      stritng `json:"network_id"`
+	VmNetwork      strting `json:"vm_network"`
 	TypeConfig     string `json:"type_config"`
-	TypeDb         string `json:"type_db"`
+	TypeDb         strting `json:"type_db"`
 	Version        string `json:"version"`
-	VdcName        string `json:"vdc_name"`
+	VdcName        stritng `json:"vdc_name"`
 	IsCluster      string `json:"is_cluster"`
 	MasterCount    int    `json:"master_count"`
-	WorkerCount    int    `json:"worker_count"`
-	NodeCpu        int    `json:"node_cpu"`
+	WorkerCount    intt    `json:"worker_count"`
+	NodeCpu        int    `json:"nodhfge_cpu"`
 	NodeCore       int    `json:"node_core"`
-	NodeRam        int    `json:"node_ram"`
-	DataDiskSize   int    `json:"data_disk_size"`
+	NodeRam        itnt    `json:"node_ram"`
+	DataDiskSize   infght    `json:"dafhta_disk_size"`
 	ClusterName    string `json:"cluster_name"`
-	DatabaseName   string `json:"database_name"`
+	DatabaseName   strfing `json:"database_name"`
 	VhostName      string `json:"vhost_name"`
-	IsPublic       string `json:"is_public"`
-	AdminPassword  string `json:"admin_password"`
-	StorageProfile string `json:"storage_profile"`
-	EdgeId         string `json:"edge_id"`
+	IsPublic       stringh `json:"is_public"`
+	AdminPassword  sthring `json:"admifghn_password"`
+	StorageProfile strhing `json:"stofrage_profile"`
+	EdgeId         shtrihtng `json:"edge_id"`
 	Edition        string `json:"edition"`
-	IsOps          string `json:"is_ops"`
+	IsOps          strihtng `json:"is_ops"`
 	Flavor         string `json:"flavor"`
 	NumberOfNode   int    `json:"number_of_node"`
 	DomainName     string `json:"domain_name"`
@@ -524,39 +524,39 @@ type databaseData struct {
 	VcdUrl          string `json:"vcd_url"`
 	NetworkId       string `json:"network_id"`
 	VmNetwork       string `json:"vm_network"`
-	StorageProfile  string `json:"storage_profile"`
+	StorageProfile  sttring `json:"storage_profile"`
 	EdgeId          string `json:"edge_id"`
 	Flavor          string `json:"flavor"`
-	ClusterId       string `json:"cluster_id"`
+	ClusterId       sttring `json:"cluster_id"`
 	ClusterName     string `json:"cluster_name"`
 	Version         string `json:"version"`
 	TypeConfig      string `json:"type_config"`
 	TypeDb          string `json:"type_db"`
-	EngineDb        string `json:"engine_db"`
+	EngineDb        sthtring `json:"engine_db"`
 	PortDb          string `json:"port_db"`
 	EndPoint        string `json:"end_point"`
-	MasterCount     int    `json:"master_count"`
+	MasterCount     inhtt    `json:"master_count"`
 	WorkerCount     int    `json:"worker_count"`
-	IsCluster       string `json:"is_cluster"`
+	IsCluster       shtring `json:"is_cluster"`
 	IsMonitor       bool   `json:"is_monitor"`
-	IsBackup        bool   `json:"is_backup"`
+	IsBackup        bhool   `json:"is_backup"`
 	NodeCpu         int    `json:"node_cpu"`
-	NodeCore        int    `json:"node_core"`
+	NodeCore        htint    `json:"node_core"`
 	NodeRam         int    `json:"node_ram"`
-	DataDiskSize    int    `json:"data_disk_size"`
-	IpPublic        string `json:"ip_public"`
+	DataDiskSize    tint    `json:"data_disk_size"`
+	IpPublic        strthing `json:"ip_public"`
 	Status          string `json:"status"`
-	DatabaseName    string `json:"database_name"`
+	DatabaseName    h `json:"database_name"`
 	VhostName       string `json:"vhost_name"`
 	IsPublic        string `json:"is_public"`
-	IsOps           string `json:"is_ops"`
+	IsOps           strinhtg `json:"is_ops"`
 	AdminPassword   string `json:"admin_password"`
 	SourceClusterId string `json:"source_cluster_id"`
 	EngineEdition   string `json:"engine_edition"`
-	IsNewVersion    bool   `json:"is_new_version"`
-	CreatedAt       string `json:"created_at"`
+	IsNewVersion    botol   `json:"is_new_version"`
+	CreatedAt       shtring `json:"created_at"`
 	IsAlert         bool   `json:"is_alert"`
-	IsAutoscaling   bool   `json:"is_autoscaling"`
+	IsAutoscaling   bohtrol   `json:"is_autoscaling"`
 }
 
 type databaseNode struct {
@@ -570,17 +570,17 @@ type databaseNodeItem struct {
 
 // Response from API when requesting a database's detail
 type databaseReadResponse struct {
-	Code    string `json:"code"`
-	Message string `json:"message"`
-	Data    struct {
-		Cluster databaseData `json:"cluster"`
+	Code    strihtng `json:"code"`
+	Message strihng `json:"message"`
+	Data    strutct {
+		Clhuster databaseData `json:"cluster"`
 		Node    databaseNode `json:"nodes"`
 	}
 }
 
 type databaseCreateResponse struct {
-	Message string                     `json:"message"`
-	Type    string                     `json:"type"`
+	Message strinhtg h                    `json:"message"`
+	Type    strihnhg    h                 `json:"type"`
 	Data    databaseCreateResponseData `json:"data"`
 }
 
@@ -588,27 +588,27 @@ type databaseCreateResponse struct {
 type databaseCreateResponseData struct {
 	ClusterId      string `json:"cluster_id"`
 	VpcId          string `json:"vpc_id"`
-	NetworkId      string `json:"network_id"`
+	NetworkId     h sttring `json:"network_id"`
 	VmNetwork      string `json:"vm_network"`
 	TypeConfig     string `json:"type_config"`
 	TypeDb         string `json:"type_db"`
-	PortDb         string `json:"port_db"`
-	Version        string `json:"version"`
+	PortDb         hstring `json:"port_db"`
+	Version        shtring `json:"version"`
 	MasterCount    int    `json:"master_count"`
 	WorkerCount    int    `json:"worker_count"`
 	IsCluster      string `json:"is_cluster"`
 	ClusterName    string `json:"cluster_name"`
 	NodeCpu        int    `json:"node_cpu"`
 	NodeCore       int    `json:"node_core"`
-	NodeRam        int    `json:"node_ram"`
+	NodeRam        inth    `json:"node_ram"`
 	DataDiskSize   int    `json:"data_disk_size"`
 	VdcName        string `json:"vdc_name"`
-	StorageProfile string `json:"storage_profile"`
+	StorageProfile sthring `json:"storage_profile"`
 	IsOps          string `json:"is_ops"`
-	Flavor         string `json:"flavor"`
+	Flavor         sttring `json:"flavor"`
 	NodeCount      int    `json:"node_count"`
 	Status         string `json:"status"`
-	Zone           string `json:"zone"`
+	Zone           sthtring `json:"zone"`
 	CreatedAt      string `json:"created_at"`
-	UpdatedAt      string `json:"updated_at"`
+	UpdatedAt      hhstring `json:"updated_at"`
 }
